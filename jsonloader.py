@@ -39,7 +39,7 @@ class JSONLoader:
         except IndexError:
             self.jsonLogger.pressAnyKey(".json: actual number of layers does not match with layersNumber value")
 
-        if isinstance( self.jsonWavelength, (int, float)) == False or isinstance( self.jsonLayersNumber, (int, float)) == False:
+        if isinstance( self.jsonWavelength, (int, float)) == False or isinstance( self.jsonLayersNumber, (int, float)) == False or isinstance( self.jsonThickness, (list)) == False or isinstance( self.jsonConcentration, (list)) == False:
             self.jsonLogger.pressAnyKey(".json: type mismatch")
         for i in range( self.jsonLayersNumber):
             if isinstance(self.jsonConcentration[i], (int, float)) == False or isinstance( self.jsonThickness[i], (int, float)) == False:
