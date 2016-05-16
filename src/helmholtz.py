@@ -34,7 +34,7 @@ class HelmholtzSolver:
         for j in range(self.matrix_dimension):
             for k in range(self.matrix_dimension):
                 if j == k:
-                    self.Matr[j][k] = self.gridN[j]**2 - neff_max**2 - 2/self.deltaArb**2
+                    self.Matr[j][k] = self.gridN[j]**2 - self.neffect[self.index_max]**2 - 2/self.deltaArb**2
                 elif j == k - 1 or j == k + 1:
                     self.Matr[j][k] = 1 / self.deltaArb ** 2
                 else:
