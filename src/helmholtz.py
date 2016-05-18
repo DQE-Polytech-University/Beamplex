@@ -1,5 +1,7 @@
 from numpy import * 
 from random import *
+import numpy as np
+import math
 
 class HelmholtzSolver:
     matrix_dimension = 0
@@ -16,6 +18,15 @@ class HelmholtzSolver:
         self.lyambda0 = lyambda
         self.thickness = thickness
         self.refraction = refr
+        self.deltaArb = self.deltaX * 2 * math.pi / self.lyambda0
+        
+    def refractionMatrix(self):
+        self.Mtr = np.zeros((self.matrix_dimension, self.matrix_dimension))
+        flat = self.Mtr.ravel()
+        flat[self.matrix_dimension :: self.matrix_dimension + 1] = (1/self.deltaArb) ** 2
+        flat[1 :: self.matrix_dimension + 1] = (1/self.deltaArb) ** 2
+        for i in range(self.matrix_dimension):
+            flat[0 :: self.matrix_dimension + 1] = self.gridN[i] - 2 / (self.deltaArb) ** 2
         
     def find_neffective(self):
         neffective = [x for x in range(self.matrix_dimension)]
@@ -24,8 +35,8 @@ class HelmholtzSolver:
         neffectiv = matric[0]                                    #returns array of eigenvalues
         for k in range(self.matrix_dimension):                   #gives squared root
             self.neffect[k] = sqrt(neffectiv[k]).real            #and returns real part
-        
-    def find_max(self):
+    
+            def find_max(self):
         neff_max = max(self.neffect)                             #gives the maximum element of index refraction matrix
         self.index_max = self.neffect.index(neff_max)
     
