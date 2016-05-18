@@ -1,0 +1,26 @@
+{                                         
+  "wavelength": 0.930,
+  "layersNumber": 5,                     
+  "layers": [                           
+    {                                     
+      "thickness": 1,
+      "concentration": 0.82
+    },    
+    {                                     
+      "thickness": 1.2,
+      "concentration": 0.83
+    },    
+    {                                     
+      "thickness": 0.01,
+      "concentration": 0.84
+    },    
+    {                                     
+      "thickness": 1.4,
+      "concentration": 0.85
+    },    
+    {                                     
+      "thickness": 1.8,
+      "concentration": 0.86
+    }                            
+  ]                                                     
+} 
