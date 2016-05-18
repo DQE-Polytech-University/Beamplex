@@ -41,7 +41,7 @@ class HelmholtzSolver:
         self.index_max = self.neffect.index(neff_max)
     
     def find_matrix(self):
-        self.Matr = [[0]*self.matrix_dimension) for x in range(self.matrix_dimension)]
+        self.Matr = [[0]*self.matrix_dimension for x in range(self.matrix_dimension)]
         for j in range(self.matrix_dimension):
             for k in range(self.matrix_dimension):
                 if j == k:
