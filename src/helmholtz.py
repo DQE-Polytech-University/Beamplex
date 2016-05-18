@@ -36,7 +36,7 @@ class HelmholtzSolver:
         for k in range(self.matrix_dimension):                   #gives squared root
             self.neffect[k] = sqrt(neffectiv[k]).real            #and returns real part
     
-            def find_max(self):
+    def find_max(self):
         neff_max = max(self.neffect)                             #gives the maximum element of index refraction matrix
         self.index_max = self.neffect.index(neff_max)
     
