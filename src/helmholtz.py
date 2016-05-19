@@ -12,6 +12,9 @@ class HelmholtzSolver:
     refr = []
     index_max = 0
     Matr = []
+    deltaX = 0
+    gridX = []
+    gridN = []
 
     def __init__(self, steps, lyambda, thickness, refr):
         self.matrix_dimension = steps
@@ -19,6 +22,19 @@ class HelmholtzSolver:
         self.thickness = thickness
         self.refraction = refr
         self.deltaArb = self.deltaX * 2 * math.pi / self.lyambda0
+        self.deltaX = (sum((int(self.thickness[i]) for i in range(0, int(len(self.thickness)))))) / float(steps)
+        self.gridX = [i * self.deltaX for i in range(steps)]
+        for i in self.gridX:
+            if 0 <= i and i < self.thickness[0]:
+                self.gridN.append(self.refraction[0])
+            if self.thickness[0] <= i and i < self.thickness[0] + self.thickness[1]:
+                self.gridN.append(self.refraction[1])
+            if self.thickness[0] + self.thickness[1] <= i and i < self.thickness[0] + self.thickness[1] + self.thickness[2]:
+                self.gridN.append(self.refraction[2])
+            if self.thickness[0] + self.thickness[1] + self.thickness[2] <= i and i < self.thickness[0] + self.thickness[1] + self.thickness[2] + self.thickness[3]:
+                self.gridN.append(self.refraction[3])
+            if self.thickness[0] + self.thickness[1] + self.thickness[2] + self.thickness[3] <= i and i < self.thickness[0] + self.thickness[1] + self.thickness[2] + self.thickness[3] + self.thickness[4]:
+                self.gridN.append(self.refraction[4])
         
     def refractionMatrix(self):
         self.Mtr = np.zeros((self.matrix_dimension, self.matrix_dimension))
