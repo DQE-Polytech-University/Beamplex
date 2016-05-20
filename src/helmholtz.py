@@ -21,8 +21,8 @@ class HelmholtzSolver:
         self.lyambda0 = lyambda
         self.thickness = thickness
         self.refraction = refr
-        self.deltaArb = self.deltaX * 2 * math.pi / self.lyambda0
         self.deltaX = (sum((int(self.thickness[i]) for i in range(0, int(len(self.thickness)))))) / float(steps)
+        self.deltaArb = self.deltaX * 2 * math.pi / self.lyambda0
         self.gridX = [i * self.deltaX for i in range(steps)]
         for i in self.gridX:
             if 0 <= i and i < self.thickness[0]:
@@ -37,12 +37,12 @@ class HelmholtzSolver:
                 self.gridN.append(self.refraction[4])
         
     def refractionMatrix(self):
-        self.Mtr = np.zeros((self.matrix_dimension, self.matrix_dimension))
+        self.Mtr = np.zeros((self.matrix_dimension + 1, self.matrix_dimension + 1))
         flat = self.Mtr.ravel()
-        flat[self.matrix_dimension :: self.matrix_dimension + 1] = (1/self.deltaArb) ** 2
-        flat[1 :: self.matrix_dimension + 1] = (1/self.deltaArb) ** 2
-        for i in range(self.matrix_dimension):
-            flat[0 :: self.matrix_dimension + 1] = self.gridN[i]**2 - 2 / (self.deltaArb) ** 2
+        flat[self.matrix_dimension + 1 :: self.matrix_dimension + 2] = (1/self.deltaArb) ** 2
+        flat[1 :: self.matrix_dimension + 2] = (1/self.deltaArb) ** 2
+        for i in range(self.matrix_dimension + 1):
+            flat[0 :: self.matrix_dimension + 2] = (self.gridN[i]**2) - 2 / (self.deltaArb) ** 2
         
     def find_neffective(self):
         neffective = [x for x in range(self.matrix_dimension)]
