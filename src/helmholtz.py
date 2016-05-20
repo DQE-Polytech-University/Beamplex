@@ -42,7 +42,7 @@ class HelmholtzSolver:
         flat[self.matrix_dimension :: self.matrix_dimension + 1] = (1/self.deltaArb) ** 2
         flat[1 :: self.matrix_dimension + 1] = (1/self.deltaArb) ** 2
         for i in range(self.matrix_dimension):
-            flat[0 :: self.matrix_dimension + 1] = self.gridN[i] - 2 / (self.deltaArb) ** 2
+            flat[0 :: self.matrix_dimension + 1] = self.gridN[i]**2 - 2 / (self.deltaArb) ** 2
         
     def find_neffective(self):
         neffective = [x for x in range(self.matrix_dimension)]
