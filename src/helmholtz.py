@@ -15,6 +15,8 @@ class HelmholtzSolver:
     deltaX = 0
     gridX = []
     gridN = []
+    X = []
+    init = 0
 
     def __init__(self, steps, lyambda, thickness, refr):
         self.matrix_dimension = steps
@@ -66,3 +68,9 @@ class HelmholtzSolver:
                     self.Matr[j][k] = 1 / self.deltaArb ** 2
                 else:
                     self.Matr[j][k] == 0
+    
+    def find_Xforward(self):
+        self.X = [0 for x in range(self.matrix_dimension)]
+        X[0] = aalp[self.init+1] * self.Matr[self.init][self.init]
+        for j in range(1,self.matrix_dimension-self.init,1):
+            X[j] = aalp[j+self.init]* X[j-1]
