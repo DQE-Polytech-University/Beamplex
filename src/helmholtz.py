@@ -17,15 +17,16 @@ class HelmholtzSolver:
     gridN = []
     X = []
     init = 0
+    aalp = []
 
     def __init__(self, steps, lyambda, thickness, refr):
         self.matrix_dimension = steps
         self.lyambda0 = lyambda
         self.thickness = thickness
         self.refraction = refr
-        self.deltaX = (sum((int(self.thickness[i]) for i in range(0, int(len(self.thickness)))))) / float(steps)
+        self.deltaX = (sum((int(self.thickness[i]) for i in range(0, int(len(self.thickness))))) - 0.001) / float(self.matrix_dimension)
         self.deltaArb = self.deltaX * 2 * math.pi / self.lyambda0
-        self.gridX = [i * self.deltaX for i in range(steps)]
+        self.gridX = [i * self.deltaX for i in range(0, self.matrix_dimension + 1)]
         for i in self.gridX:
             if 0 <= i and i < self.thickness[0]:
                 self.gridN.append(self.refraction[0])
@@ -47,11 +48,11 @@ class HelmholtzSolver:
             flat[0 :: self.matrix_dimension + 2] = (self.gridN[i]**2) - 2 / (self.deltaArb) ** 2
         
     def find_neffective(self):
-        neffective = [x for x in range(self.matrix_dimension)]
-        self.neffect = [x for x in range(self.matrix_dimension)]
+        neffective = [x for x in range(self.matrix_dimension + 1)]
+        self.neffect = [x for x in range(self.matrix_dimension + 1)]
         matric = linalg.eig(self.Mtr)                            #gives the eigenvalues and right eigenvectors of a square array
         neffectiv = matric[0]                                    #returns array of eigenvalues
-        for k in range(self.matrix_dimension):                   #gives squared root
+        for k in range(self.matrix_dimension + 1):                   #gives squared root
             self.neffect[k] = sqrt(neffectiv[k]).real            #and returns real part
     
     def find_max(self):
@@ -59,18 +60,16 @@ class HelmholtzSolver:
         self.index_max = self.neffect.index(neff_max)
     
     def find_matrix(self):
-        self.Matr = [[0]*self.matrix_dimension for x in range(self.matrix_dimension)]
-        for j in range(self.matrix_dimension):
-            for k in range(self.matrix_dimension):
+        self.Matr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
+        for j in range(self.matrix_dimension + 1):
+            for k in range(self.matrix_dimension + 1):
                 if j == k:
                     self.Matr[j][k] = self.gridN[j]**2 - self.neffect[self.index_max]**2 - 2/self.deltaArb**2
                 elif j == k - 1 or j == k + 1:
                     self.Matr[j][k] = 1 / self.deltaArb ** 2
-                else:
-                    self.Matr[j][k] == 0
     
     def find_Xforward(self):
         self.X = [0 for x in range(self.matrix_dimension)]
-        X[0] = aalp[self.init+1] * self.Matr[self.init][self.init]
+        X[0] = self.aalp[self.init+1] * self.Matr[self.init][self.init]
         for j in range(1,self.matrix_dimension-self.init,1):
-            X[j] = aalp[j+self.init]* X[j-1]
+            X[j] = self.aalp[j+self.init]* X[j-1]
