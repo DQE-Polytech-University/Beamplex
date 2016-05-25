@@ -68,6 +68,14 @@ class HelmholtzSolver:
                 elif j == k - 1 or j == k + 1:
                     self.Matr[j][k] = 1 / self.deltaArb ** 2
         self.Matr[self.init+1][self.init+1] = 1
+ 
+    def coeffs(self, initPoint):
+        self.init = initPoint
+        self.Matr[self.init][self.init] = 1
+        self.aalp = [0 for x in range(self.matrix_dimension + 1)]
+        self.aalp[self.matrix_dimension] = float(-self.Matr[self.matrix_dimension][self.matrix_dimension - 1]) / float(self.Matr[self.matrix_dimension][self.matrix_dimension])
+        for i in range(self.matrix_dimension - 1, self.init, -1):
+            self.aalp[i] = float(-self.Matr[i][i-1]) / float(self.Matr[i][i] + self.Matr[i][i+1] * self.aalp[i+1])
     
     def find_Xforward(self):
         self.X = [0 for x in range(self.matrix_dimension)]
