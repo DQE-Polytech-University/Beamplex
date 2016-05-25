@@ -24,7 +24,7 @@ class HelmholtzSolver:
         self.lyambda0 = lyambda
         self.thickness = thickness
         self.refraction = refr
-        self.deltaX = (sum((self.thickness[i] for i in range(0, int(len(self.thickness))))) - 0.001) / float(self.matrix_dimension) 
+        self.deltaX = (sum((float(self.thickness[i]) for i in range(0, int(len(self.thickness))))) - 0.001) / float(self.matrix_dimension) 
         self.deltaArb = float(self.deltaX * 2 * math.pi) / float(self.lyambda0)
         self.gridX = [i * self.deltaX for i in range(0, self.matrix_dimension + 1)]
         for i in self.gridX:
@@ -67,9 +67,10 @@ class HelmholtzSolver:
                     self.Matr[j][k] = self.gridN[j]**2 - self.neffect[self.index_max]**2 - 2/self.deltaArb**2
                 elif j == k - 1 or j == k + 1:
                     self.Matr[j][k] = 1 / self.deltaArb ** 2
+        self.Matr[self.init+1][self.init+1] = 1
     
     def find_Xforward(self):
         self.X = [0 for x in range(self.matrix_dimension)]
-        X[0] = self.aalp[self.init+1] * self.Matr[self.init][self.init]
+        self.X[0] = self.aalp[self.init+1] * self.Matr[self.init][self.init]
         for j in range(1,self.matrix_dimension-self.init,1):
             X[j] = self.aalp[j+self.init]* X[j-1]
