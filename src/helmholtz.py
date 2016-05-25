@@ -73,4 +73,4 @@ class HelmholtzSolver:
         self.X = [0 for x in range(self.matrix_dimension)]
         self.X[0] = self.aalp[self.init+1] * self.Matr[self.init][self.init]
         for j in range(1,self.matrix_dimension-self.init,1):
-            X[j] = self.aalp[j+self.init]* X[j-1]
+            self.X[j] = self.aalp[j+self.init]* self.X[j-1]
