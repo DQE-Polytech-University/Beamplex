@@ -18,6 +18,8 @@ class HelmholtzSolver:
     X = []
     init = 0
     aalp = []
+    Y = []
+    U = []
 
     def __init__(self, steps, lyambda, thickness, refr):
         self.matrix_dimension = steps
@@ -89,3 +91,10 @@ class HelmholtzSolver:
         self.Y[self.init + 1] = self.X[2]
         for j in range(self.init,-1,1):
             self.Y[j] = float(-(1/self.Matr[j+1][j]) * (self.Matr[j+1][j+1] * self.Y[j+1])) + float(self.Matr[j+1][j+2] * self.Y[j+2])
+            
+    def Field(self):
+        self.U = [0 for x in range(self.matrix_dimension + 1)]
+        for i in range(self.init):
+            self.U[i] = self.Y[i]
+        for j in range(self.init,self.matrix_dimension + 1 ):
+            self.U[j] = self.X[self.init + 3 - j]
