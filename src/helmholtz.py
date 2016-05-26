@@ -20,7 +20,11 @@ class HelmholtzSolver:
     aalp = []
     Y = []
     U = []
-
+    U1 = []
+    UtotalNorm1 = []
+    elemk = []
+    UTOTAL = []
+    
     def __init__(self, steps, lyambda, thickness, refr):
         self.matrix_dimension = steps
         self.lyambda0 = lyambda
@@ -98,3 +102,18 @@ class HelmholtzSolver:
             self.U[i] = self.Y[i]
         for j in range(self.init,self.matrix_dimension + 1 ):
             self.U[j] = self.X[self.init + 3 - j]
+            
+    def Norm(self):
+        for i in range(self.matrix_dimension + 1):
+            self.U1.append(math.fabs(self.U[i]))
+            Umax = - max(self.U1)            
+        for j in range(self.matrix_dimension + 1):
+            q = self.U[j] / Umax
+            self.UtotalNorm1.append(q)
+        for k in range(self.matrix_dimension + 1):
+            elem = ((self.UtotalNorm1[k])**2) * self.deltaX
+            self.elemk.append(elem) 
+            IntU = np.sum(self.elemk)
+        for n in range(self.matrix_dimension + 1):
+            w = self.UtotalNorm1[n] / (IntU) ** 1/2
+            self.UTOTAL.append(w)
