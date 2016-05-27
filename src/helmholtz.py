@@ -73,7 +73,6 @@ class HelmholtzSolver:
                     self.Matr[j][k] = self.gridN[j]**2 - self.neffect[self.index_max]**2 - 2/self.deltaArb**2
                 elif j == k - 1 or j == k + 1:
                     self.Matr[j][k] = 1 / self.deltaArb ** 2
-        self.Matr[self.init+1][self.init+1] = 1
  
     def coeffs(self, initPoint):
         self.init = initPoint
