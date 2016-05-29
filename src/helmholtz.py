@@ -46,12 +46,13 @@ class HelmholtzSolver:
                 self.gridN.append(self.refraction[4])
         
     def refractionMatrix(self):
-        self.Mtr = np.zeros((self.matrix_dimension + 1, self.matrix_dimension + 1))             
-        flat = self.Mtr.ravel()
-        flat[self.matrix_dimension + 1 :: self.matrix_dimension + 2] = (1/self.deltaArb) ** 2
-        flat[1 :: self.matrix_dimension + 2] = (1/self.deltaArb) ** 2
-        for i in range(self.matrix_dimension + 1):
-            flat[0 :: self.matrix_dimension + 2] = (self.gridN[i] ** 2) - 2 / (self.deltaArb) ** 2 
+        self.Mtr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
+        for j in range(self.matrix_dimension + 1):
+            for k in range(self.matrix_dimension + 1):
+                if j == k:
+                    self.Mtr[j][k] = (self.gridN[j] ** 2) - 2 / (self.deltaArb) ** 2
+                elif j == k - 1 or j == k + 1:
+                    self.Mtr[j][k] = 1 / self.deltaArb ** 2
         
     def find_neffective(self):
         neffective = [x for x in range(self.matrix_dimension + 1)]
