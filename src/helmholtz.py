@@ -92,7 +92,7 @@ class HelmholtzSolver:
     def find_Xrev(self):
         self.Y = [0 for x in range(self.init + 2)]
         self.Y[self.init ] =  self.X[0]
-        self.Y[self.init + 1] = self.X[2]
+        self.Y[self.init + 1] = self.X[1]
         for j in range(self.init,-1,1):
             self.Y[j] = float(-(1/self.Matr[j+1][j]) * (self.Matr[j+1][j+1] * self.Y[j+1])) + float(self.Matr[j+1][j+2] * self.Y[j+2])
             
