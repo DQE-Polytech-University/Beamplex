@@ -2,6 +2,7 @@ from numpy import *
 from random import *
 import numpy as np
 import math
+import cmath
 
 class HelmholtzSolver:
     matrix_dimension = 0
@@ -60,7 +61,7 @@ class HelmholtzSolver:
         matric = linalg.eig(self.Mtr)                            #gives the eigenvalues and right eigenvectors of a square array
         neffectiv = matric[0]                                    #returns array of eigenvalues
         for k in range(self.matrix_dimension + 1):                   #gives squared root
-            self.neffect[k] = (sqrt(neffectiv[k])).real            #and returns real part
+            self.neffect[k] = (cmath.sqrt(neffectiv[k])).real            #and returns real part
     
     def find_max(self):
         neff_max = max(self.neffect)                             #gives the maximum element of index refraction matrix
