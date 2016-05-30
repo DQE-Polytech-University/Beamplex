@@ -116,5 +116,5 @@ class HelmholtzSolver:
             self.elemk.append(elem) 
             IntU = np.sum(self.elemk)
         for n in range(self.matrix_dimension + 1):
-            w = float(self.UtotalNorm1[n]) / float((IntU) ** 1/2)
+            w = float(self.UtotalNorm1[n]) / float(math.sqrt(IntU))
             self.UTOTAL.append(w)
