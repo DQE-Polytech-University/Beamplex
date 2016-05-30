@@ -84,9 +84,9 @@ class HelmholtzSolver:
             self.aalp[i] = float(-self.Matr[i][i-1]) / float(self.Matr[i][i] + self.Matr[i][i+1] * self.aalp[i+1])
     
     def find_Xforward(self):
-        self.X = [0 for x in range(self.matrix_dimension)]
+        self.X = [0 for x in range(self.matrix_dimension - self.init + 1)]
         self.X[0] = self.aalp[self.init+1] * self.Matr[self.init][self.init]
-        for j in range(1,self.matrix_dimension-self.init,1):
+        for j in range(1,self.matrix_dimension-self.init +1):
             self.X[j] = self.aalp[j+self.init]* self.X[j-1]
             
     def find_Xrev(self):
