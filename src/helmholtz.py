@@ -93,15 +93,15 @@ class HelmholtzSolver:
         self.Y = [0 for x in range(self.init + 2)]
         self.Y[self.init ] =  self.X[0]
         self.Y[self.init + 1] = self.X[1]
-        for j in range(self.init,-1,1):
-            self.Y[j] = float(-(1/self.Matr[j+1][j]) * (self.Matr[j+1][j+1] * self.Y[j+1])) + float(self.Matr[j+1][j+2] * self.Y[j+2])
+        for j in range(self.init - 1,-1,-1):
+            self.Y[j] = float((-1/self.Matr[j+1][j])) * float((self.Matr[j+1][j+1] * self.Y[j+1] + self.Matr[j+1][j+2] * self.Y[j+2]))
             
     def Field(self):
         self.U = [0 for x in range(self.matrix_dimension + 1)]
-        for i in range(self.init):
+        for i in range(self.init + 1):
             self.U[i] = self.Y[i]
-        for j in range(self.init,self.matrix_dimension + 1 ):
-            self.U[j] = self.X[self.init + 3 - j]
+        for j in range(self.init + 1 , self.matrix_dimension + 1):
+            self.U[j] = self.X[j - self.init]
             
     def Norm(self):
         for i in range(self.matrix_dimension + 1):
@@ -111,9 +111,9 @@ class HelmholtzSolver:
             q = self.U[j] / Umax
             self.UtotalNorm1.append(q)
         for k in range(self.matrix_dimension + 1):
-            elem = ((self.UtotalNorm1[k])**2) * self.deltaX
+            elem = float((self.UtotalNorm1[k])**2) * self.deltaX
             self.elemk.append(elem) 
             IntU = np.sum(self.elemk)
         for n in range(self.matrix_dimension + 1):
-            w = self.UtotalNorm1[n] / (IntU) ** 1/2
+            w = float(self.UtotalNorm1[n]) / float((IntU) ** 1/2)
             self.UTOTAL.append(w)
