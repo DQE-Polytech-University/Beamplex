@@ -7,6 +7,29 @@ class RefractionCalc:
     wavelength = 0
     
     def __init__(self, lyambda, layersNumber, concentration):
+        
+        if isinstance(lyambda, (int, float)) == False:
+            raise TypeError("lyambda should be a number")
+        if isinstance(layersNumber, (int, float)) == False:
+            raise TypeError("layersNumber should be a number")
+        if isinstance(concentration, list) == False:
+            raise TypeError("concentration should be a list")
+        for i in range(layersNumber):
+            if isinstance(concentration[i], (int, float)) == False:
+                raise TypeError("concentration elements should be numbers")
+                break
+            
+        if lyambda is None:
+            raise ValueError("lyambda is undefined")
+        if layersNumber is None:
+            raise ValueError("layersNumber is undefined")
+        if concentration is None:
+            raise ValueError("concentration is undefined")
+            
+        if lyambda < 0.85 or lyambda > 1.5:
+            raise ValueError("lyambda out of range")
+            
+        
         self.concentration = concentration
         self.wavelength = lyambda
         self.layersNumber = layersNumber
