@@ -77,6 +77,26 @@ class HelmholtzSolver:
                     self.Matr[j][k] = 1 / self.deltaArb ** 2
  
     def coeffs(self, initPoint):
+        if isinstance(self.aalp, list) == False:
+            raise TypeError("self.aalp should be a list")
+        for i in range(self.aalp):
+            if isinstance(self.aalp[i], (int, float)) == False:
+                raise TypeError("self.aalp elements should be numbers")
+        if self.matrix_dimension <= 0:
+            raise ValueError("self.matrix_dimension out of range")
+        if len(self.aalp) == self.matrix_dimension + 1 is False:
+            raise ValueError("self.aalp out of range")
+        for j in range(self.matrix_dimension + 1):
+            for k in range(self.matrix_dimension + 1):
+                if isinstance(self.Matr[j][k], (int, float)) == False:
+                    raise TypeError("self.Matr[j][k] should be a number")
+        if self.init is None:
+            raise ValueError("self.init is undefined")
+        if self.matrix_dimension is None:
+            raise ValueError("self.matrix_dimension is undefined")
+        if self.aalp is None:
+            raise ValueError("self.aalp is undefined")
+        
         self.init = initPoint
         self.Matr[self.init][self.init] = 1
         self.aalp = [0 for x in range(self.matrix_dimension + 1)]
@@ -85,12 +105,38 @@ class HelmholtzSolver:
             self.aalp[i] = float(-self.Matr[i][i-1]) / float(self.Matr[i][i] + self.Matr[i][i+1] * self.aalp[i+1])
     
     def find_Xforward(self):
+        if self.init <= 0:
+            raise ValueError("self.init out of range")
+        if self.matrix_dimension <= 0:
+            raise ValueError("self.matrix_dimension out of range")
+        if isinstance(self.Matr, list) == False:
+            raise TypeError("self.Y should be a list")
+        for j in range(self.matrix_dimension + 1):
+            for k in range(self.matrix_dimension + 1):
+                if isinstance(self.Matr[j][k], (int, float)) == False:
+                    raise TypeError("self.Matr[j][k] should be a number")
+        if self.init is None:
+            raise ValueError("self.init is undefined")
+        if self.matrix_dimension is None:
+            raise ValueError("self.matrix_dimension is undefined")
+
         self.X = [0 for x in range(self.matrix_dimension - self.init + 1)]
         self.X[0] = self.aalp[self.init+1] * self.Matr[self.init][self.init]
         for j in range(1,self.matrix_dimension-self.init +1):
             self.X[j] = self.aalp[j+self.init]* self.X[j-1]
             
     def find_Xrev(self):
+        if self.init <= 0:
+            raise ValueError("self.init out of range")
+        if isinstance(self.Matr, list) == False:
+            raise TypeError("self.Y should be a list")
+        for j in range(self.matrix_dimension + 1):
+            for k in range(self.matrix_dimension + 1):
+                if isinstance(self.Matr[j][k], (int, float)) == False:
+                    raise TypeError("self.Matr[j][k] should be a number")
+        if self.init is None:
+            raise ValueError("self.init is undefined")
+        
         self.Y = [0 for x in range(self.init + 2)]
         self.Y[self.init ] =  self.X[0]
         self.Y[self.init + 1] = self.X[1]
