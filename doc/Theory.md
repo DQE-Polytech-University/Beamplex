@@ -2,7 +2,7 @@
 **Modeling of the profile of the transverse (or vertical) optical mode is one of the most important stages of design powerful semiconductor laser.
 Optical mode is called the spatial nature of the intensity propagation of the electromagnetic radiation inside the optical resonator including the laser.**
 
-![1](https://raw.githubusercontent.com/DQE-Polytech-University/Beamplex/master/doc/Images/mode.png)
+![1](https://raw.githubusercontent.com/DQE-Polytech-University/Beamplex/master/doc/mode.png)
 
 **Mode profile I(x,y,z) refers to the spatial
 propagation of the square modulus of the electric field vector of the electromagnetic wave E<SUP>2</SUP>(x,y,z).**
