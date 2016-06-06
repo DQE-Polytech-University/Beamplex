@@ -4,6 +4,9 @@ class Laser:
 
     laserRefraction = []
     laserField = []
+    gridX = []
+    gridN = []
+    field = []
 
     def __init__(self, wavelength, layersNumber, concentration, thickness):
 
@@ -27,7 +30,7 @@ class Laser:
             raise ValueError("concentration is undefined")
         if thickness is None:
             raise ValueError("thickness is undefined")
-            
+        
         if wavelength < 0.85 or wavelength > 1.5:
             raise ValueError("wavelength out of range")
         
@@ -38,17 +41,31 @@ class Laser:
 
 
     def plotRefraction(self):
-        coord = [0]
-        sum = 0
-        refr = [self.laserRefraction[0]]
-        for i in range(self.laserLayersNumber):
-            sum += self.laserThickness[i]
-            coord.append(sum-0.0001)
-            coord.append(sum)
-            refr.append(self.laserRefraction[i])
-            if i < self.laserLayersNumber - 1:
-                refr.append(self.laserRefraction[i+1])
-            else:
-                refr.append(self.laserRefraction[i])
-        plt.plot(coord, refr, 'b')
-        plt.show()
+        
+        plt.plot(self.gridX, self.gridN)
+        plt.xlabel('position, micrometers')
+        plt.ylabel('refraction index, arb. units')
+        plt.title('Refraction Index Profile')
+        plt.savefig('refraction.png', format='png', dpi=100)
+        plt.clf()
+
+        refractionFile = open("refraction.txt", "w")
+        for i in range(len(self.gridN)):
+            refractionFile.write(str(self.gridX[i]) + ": " + str(self.gridN[i]) + "\n")
+        refractionFile.close()
+        
+    def plotField(self):
+        
+        for i in range(len(self.field)):
+            self.field[i] = self.field[i] ** 2
+        plt.plot(self.gridX, self.field)
+        plt.xlabel('position, micrometers')
+        plt.ylabel('electric field, arb. units')
+        plt.title('Electric field in laser structure')
+        plt.savefig('field.png', format='png', dpi=100)
+        plt.clf()
+
+        fieldFile = open("field.txt", "w")
+        for i in range(len(self.gridN)):
+            fieldFile.write(str(self.gridX[i]) + ": " + str(self.field[i]) + "\n")
+        fieldFile.close()
