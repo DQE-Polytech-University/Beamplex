@@ -79,7 +79,7 @@ class HelmholtzSolver:
     def coeffs(self, initPoint):
         if isinstance(self.aalp, list) == False:
             raise TypeError("self.aalp should be a list")
-        for i in range(self.aalp):
+        for i in range(len(self.aalp)):
             if isinstance(self.aalp[i], (int, float)) == False:
                 raise TypeError("self.aalp elements should be numbers")
         if self.matrix_dimension <= 0:
