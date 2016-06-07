@@ -1,11 +1,37 @@
 from jsonloader import *
 from refraction import *
 from helmholtz import *
+from laserstructure import *
+import sys
+import argparse
 
-filePath = input('Enter path to .json file with laser structure in single brackets:')
+parser = argparse.ArgumentParser()
+parser.add_argument('filePath', type = str, nargs = '?')
+parser.add_argument('steps', type = int, nargs = '?')
+namespace = parser.parse_args(sys.argv[1:])
+filePath = namespace.filePath
+steps = namespace.steps
 
-log1 = Logger()
-loader1 = JSONLoader(filePath, log1)
-
+loader1 = JSONLoader(filePath)
 loader1.loadJSON()
-loader1.parseJSONData()
+laser1 = Laser(loader1.parseJSONData())
+
+calc1 = RefractionCalc(laser1.laserWavelength, laser1.laserLayersNumber, laser1.laserConcentration)
+calc1.computeRefraction()
+#calc1.refraction[2] = 3.6
+solver1 = HelmholtzSolver(steps, laser1.laserWavelength, laser1.laserThickness, calc1.refraction)
+solver1.refractionMatrix()
+solver1.find_neffective()
+solver1.find_max()
+solver1.find_matrix()
+solver1.coeffs(990)
+solver1.find_Xforward()
+solver1.find_Xrev()
+solver1.Field()
+solver1.Norm()
+
+laser1.gridX = solver1.gridX
+laser1.gridN = solver1.gridN
+laser1.field = solver1.UTOTAL
+laser1.plotRefraction()
+laser1.plotField()
