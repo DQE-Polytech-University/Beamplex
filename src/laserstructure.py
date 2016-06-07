@@ -8,7 +8,7 @@ class Laser:
     gridN = []
     field = []
 
-    def __init__(self, wavelength, layersNumber, concentration, thickness):
+    def __init__(self, (wavelength, layersNumber, concentration, thickness)):
 
         if isinstance(wavelength, (int, float)) == False:
             raise TypeError("wavelength should be a number")
