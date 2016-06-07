@@ -6,6 +6,8 @@ import sys
 class JSONLoader:
     
     def __init__(self, filename):
+        if isinstance(filename, str) == False:
+            raise TypeError("wrong path")
         self.fileName = filename
      
 
@@ -17,8 +19,7 @@ class JSONLoader:
             raise IOError(": file not found")
         except ValueError:
             raise ValueError(": syntax error")
-        finally:
-            print(self.fileName + " successfully loaded")
+        print(self.fileName + " successfully loaded")
 
 
     def parseJSONData(self):
