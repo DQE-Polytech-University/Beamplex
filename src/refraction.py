@@ -25,7 +25,7 @@ class RefractionCalc:
         if lyambda < 0.85 or lyambda > 1.5:
             raise ValueError("lyambda out of range")
         for i in range(5): 
-            if concentration[i] < 0 or concentration[i] > 1:
+            if concentration[i] <= 0 or concentration[i] >= 1:
                 raise ValueError("concentration out of range")
             
         
