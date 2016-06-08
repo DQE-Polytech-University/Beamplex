@@ -8,24 +8,20 @@ class Laser:
     gridN = []
     field = []
 
-    def __init__(self, (wavelength, layersNumber, concentration, thickness)):
+    def __init__(self, (wavelength, concentration, thickness)):
 
         if isinstance(wavelength, (int, float)) == False:
             raise TypeError("wavelength should be a number")
-        if isinstance(layersNumber, (int, float)) == False:
-            raise TypeError("layersNumber should be a number")
         if isinstance(concentration, list) == False:
             raise TypeError("concentration should be a list")
         if isinstance( thickness, (list)) == False:
             raise TypeError("thickness should be a list")
-        for i in range(layersNumber):
+        for i in range(5):
             if isinstance(concentration[i], (int, float)) == False or isinstance( thickness[i], (int, float)) == False:
                 raise TypeError("concentration and thickness elements should be numbers")
 
         if wavelength is None:
             raise ValueError("wavelength is undefined")
-        if layersNumber is None:
-            raise ValueError("layersNumber is undefined")
         if concentration is None:
             raise ValueError("concentration is undefined")
         if thickness is None:
@@ -35,7 +31,6 @@ class Laser:
             raise ValueError("wavelength out of range")
         
         self.wavelength = wavelength
-        self.layersNumber = layersNumber
         self.concentration = concentration
         self.thickness = thickness
 

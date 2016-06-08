@@ -6,36 +6,31 @@ class RefractionCalc:
     refraction = []
     wavelength = 0
     
-    def __init__(self, lyambda, layersNumber, concentration):
+    def __init__(self, lyambda, concentration):
         
         if isinstance(lyambda, (int, float)) == False:
             raise TypeError("lyambda should be a number")
-        if isinstance(layersNumber, (int, float)) == False:
-            raise TypeError("layersNumber should be a number")
         if isinstance(concentration, list) == False:
             raise TypeError("concentration should be a list")
-        for i in range(layersNumber):
+        for i in range(5):
             if isinstance(concentration[i], (int, float)) == False:
                 raise TypeError("concentration elements should be numbers")
                 break
             
         if lyambda is None:
             raise ValueError("lyambda is undefined")
-        if layersNumber is None:
-            raise ValueError("layersNumber is undefined")
         if concentration is None:
             raise ValueError("concentration is undefined")
             
         if lyambda < 0.85 or lyambda > 1.5:
             raise ValueError("lyambda out of range")
-        for i in range(layersNumber): 
+        for i in range(5): 
             if concentration[i] < 0 or concentration[i] > 1:
                 raise ValueError("concentration out of range")
             
         
         self.concentration = concentration
         self.wavelength = lyambda
-        self.layersNumber = layersNumber
         
         
     def refraction_AlGaAs(self, concentration):	#index of refraction Al_x Ga_1-x As calculation:
@@ -60,10 +55,9 @@ class RefractionCalc:
         return n
 
     def computeRefraction(self):
-        for i in range(self.layersNumber):
-            if i == (self.layersNumber / 2):
-                self.refraction.append(self.refraction_InGaAs(self.concentration[i]))
-            else:
-                self.refraction.append(self.refraction_AlGaAs(self.concentration[i]))
+        self.refraction = [0 for i in range(5)]
+        for i in [0, 1, 3, 4]:
+            self.refraction[i] = self.refraction_AlGaAs(self.concentration[i])
+        self.refraction[2] = self.refraction_InGaAs(self.concentration[2])
 
 
