@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 
 class Laser:
 
-    laserRefraction = []
-    laserField = []
+    refraction = []
+    field = []
     gridX = []
     gridN = []
     field = []
@@ -34,10 +34,10 @@ class Laser:
         if wavelength < 0.85 or wavelength > 1.5:
             raise ValueError("wavelength out of range")
         
-        self.laserWavelength = wavelength
-        self.laserLayersNumber = layersNumber
-        self.laserConcentration = concentration
-        self.laserThickness = thickness
+        self.wavelength = wavelength
+        self.layersNumber = layersNumber
+        self.concentration = concentration
+        self.thickness = thickness
 
 
     def plotRefraction(self):

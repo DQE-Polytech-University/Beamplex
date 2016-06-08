@@ -16,10 +16,10 @@ loader1 = JSONLoader(filePath)
 loader1.loadJSON()
 laser1 = Laser(loader1.parseJSONData())
 
-calc1 = RefractionCalc(laser1.laserWavelength, laser1.laserLayersNumber, laser1.laserConcentration)
+calc1 = RefractionCalc(laser1.wavelength, laser1.layersNumber, laser1.concentration)
 calc1.computeRefraction()
 #calc1.refraction[2] = 3.6
-solver1 = HelmholtzSolver(steps, laser1.laserWavelength, laser1.laserThickness, calc1.refraction)
+solver1 = HelmholtzSolver(steps, laser1.wavelength, laser1.thickness, calc1.refraction)
 solver1.refractionMatrix()
 solver1.find_neffective()
 solver1.find_max()
