@@ -42,7 +42,7 @@ class JSONLoader:
         for i in range(5):
             if isinstance(self.jsonConcentration[i], (int, float)) == False or isinstance( self.jsonThickness[i], (int, float)) == False:
                 raise TypeError(".json: type mismatch")
-            if self.jsonConcentration[i] <= 0 or self.jsonConcentration[i] >= 1 or self.jsonThickness <= 0:
+            if self.jsonConcentration[i] <= 0 or self.jsonConcentration[i] >= 1 or self.jsonThickness[i] <= 0:
                 raise ValueError(".json: data out of range")
 
         if self.jsonWavelength < 0.85 or self.jsonWavelength > 1.5:
