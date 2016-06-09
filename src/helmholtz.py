@@ -4,6 +4,7 @@ import numpy as np
 import math
 import cmath
 
+#computes electric field in the specified number of points for certain wavelength and laser structure configuration
 class HelmholtzSolver:
     matrix_dimension = 0
     lyambda0 = 0
@@ -45,7 +46,8 @@ class HelmholtzSolver:
                 self.gridN.append(self.refraction[3])
             if self.thickness[0] + self.thickness[1] + self.thickness[2] + self.thickness[3] <= i and i < self.thickness[0] + self.thickness[1] + self.thickness[2] + self.thickness[3] + self.thickness[4]:
                 self.gridN.append(self.refraction[4])
-        
+
+    #composes a matrix for computation of maximal effective refractive index     
     def refractionMatrix(self):
         self.Mtr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
         for j in range(self.matrix_dimension + 1):
@@ -54,19 +56,21 @@ class HelmholtzSolver:
                     self.Mtr[j][k] = (self.gridN[j] ** 2) - 2 / (self.deltaArb) ** 2
                 elif j == k - 1 or j == k + 1:
                     self.Mtr[j][k] = 1 / self.deltaArb ** 2
-        
+
+    #finds maximal effective refractive index as a maximal real eigenvalue of Mtr matrix     
     def find_neffective(self):
         neffective = [x for x in range(self.matrix_dimension + 1)]
         self.neffect = [x for x in range(self.matrix_dimension + 1)]
-        matric = linalg.eig(self.Mtr)                            #gives the eigenvalues and right eigenvectors of a square array
-        neffectiv = matric[0]                                    #returns array of eigenvalues
-        for k in range(self.matrix_dimension + 1):                   #gives squared root
-            self.neffect[k] = (cmath.sqrt(neffectiv[k])).real            #and returns real part
+        matric = linalg.eig(self.Mtr)                            
+        neffectiv = matric[0]                                    
+        for k in range(self.matrix_dimension + 1):                   
+            self.neffect[k] = (cmath.sqrt(neffectiv[k])).real            
     
     def find_max(self):
-        neff_max = max(self.neffect)                             #gives the maximum element of index refraction matrix
+        neff_max = max(self.neffect)                             
         self.index_max = self.neffect.index(neff_max)
-    
+
+    #composes a matrix for tridiagonal matrix algorithm
     def find_matrix(self):
         self.Matr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
         for j in range(self.matrix_dimension + 1):
@@ -75,7 +79,8 @@ class HelmholtzSolver:
                     self.Matr[j][k] = self.gridN[j]**2 - self.neffect[self.index_max]**2 - 2/self.deltaArb**2
                 elif j == k - 1 or j == k + 1:
                     self.Matr[j][k] = 1 / self.deltaArb ** 2
- 
+
+    #finds coefficients for tridiagonal matrix algorithm
     def coeffs(self, initPoint):
         if isinstance(self.aalp, list) == False:
             raise TypeError("self.aalp should be a list")
@@ -103,7 +108,8 @@ class HelmholtzSolver:
         self.aalp[self.matrix_dimension] = float(-self.Matr[self.matrix_dimension][self.matrix_dimension - 1]) / float(self.Matr[self.matrix_dimension][self.matrix_dimension])
         for i in range(self.matrix_dimension - 1, self.init, -1):
             self.aalp[i] = float(-self.Matr[i][i-1]) / float(self.Matr[i][i] + self.Matr[i][i+1] * self.aalp[i+1])
-    
+            
+    #forward sweep of tridiagonal matrix algorithm
     def find_Xforward(self):
         if self.init <= 0:
             raise ValueError("self.init out of range")
@@ -124,7 +130,8 @@ class HelmholtzSolver:
         self.X[0] = self.aalp[self.init+1] * self.Matr[self.init][self.init]
         for j in range(1,self.matrix_dimension-self.init +1):
             self.X[j] = self.aalp[j+self.init]* self.X[j-1]
-            
+
+    #reverse sweep of tridiagonal matrix algorithm        
     def find_Xrev(self):
         if self.init <= 0:
             raise ValueError("self.init out of range")
@@ -142,14 +149,16 @@ class HelmholtzSolver:
         self.Y[self.init + 1] = self.X[1]
         for j in range(self.init - 1,-1,-1):
             self.Y[j] = float((-1/self.Matr[j+1][j])) * float((self.Matr[j+1][j+1] * self.Y[j+1] + self.Matr[j+1][j+2] * self.Y[j+2]))
-            
+
+    #composes final solution        
     def Field(self):
         self.U = [0 for x in range(self.matrix_dimension + 1)]
         for i in range(self.init + 1):
             self.U[i] = self.Y[i]
         for j in range(self.init + 1 , self.matrix_dimension + 1):
             self.U[j] = self.X[j - self.init]
-            
+
+    #normalizes the solution        
     def Norm(self):
         for i in range(self.matrix_dimension + 1):
             self.U1.append(math.fabs(self.U[i]))

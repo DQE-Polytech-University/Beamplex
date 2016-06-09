@@ -2,15 +2,15 @@ import json
 import os
 import sys
 
-
+#loads .json file, describing laser structure, and extracts data from it
 class JSONLoader:
     
     def __init__(self, filename):
         if isinstance(filename, str) == False:
             raise TypeError("wrong path")
         self.fileName = filename
-     
 
+    #loads .json file 
     def loadJSON( self ):
         try:
             with open(self.fileName) as jsonFile:
@@ -21,10 +21,8 @@ class JSONLoader:
             raise ValueError(": syntax error")
         print(self.fileName + " successfully loaded")
 
-
-    def parseJSONData(self):
-        
-
+    #parses .json file and returns laser structure parameters
+    def parseJSONData(self):      
         try:
             self.jsonConcentration = []
             self.jsonThickness = []
@@ -57,7 +55,4 @@ class JSONLoader:
 
         print(".json file successfully parsed")
         return(( self.jsonWavelength, self.jsonConcentration, self.jsonThickness))
-
-
-
-        
+       

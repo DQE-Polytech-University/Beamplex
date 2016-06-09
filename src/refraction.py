@@ -1,6 +1,8 @@
+#Planck constant in eV and speed of light in vacuum in micrometers
 h = 4.1356 * 10 ** (-15)
 cl = 2.998 * 10 ** 14
 
+#computes refraction profile for the given laser structure
 class RefractionCalc:
     concentration = []
     refraction = []
@@ -32,8 +34,8 @@ class RefractionCalc:
         self.concentration = concentration
         self.wavelength = lyambda
         
-        
-    def refraction_AlGaAs(self, concentration):	#index of refraction Al_x Ga_1-x As calculation:
+    #index of refraction Al_x Ga_1-x As calculation    
+    def refraction_AlGaAs(self, concentration):	
         A0 = 6.3 + 19 * concentration
         B0 = 9.4 - 10.2 * concentration
         E0 = 1.425 + 1.155 * concentration + 0.37 * concentration ** 2
@@ -45,7 +47,8 @@ class RefractionCalc:
         n = (A0 * (f + fSO/2 * (E0 / (E0 + delta0)) ** 1.5) + B0) ** 0.5
         return n
     
-    def refraction_InGaAs(self, concentration):	#index of refraction In_x Ga_1-x As calculation:
+    #index of refraction In_x Ga_1-x As calculation
+    def refraction_InGaAs(self, concentration):	
         A = 8.95
         B = 2.054
         C = 0.6245
@@ -54,6 +57,7 @@ class RefractionCalc:
         n = (A + B/ (1 - (C * Eggaas / (self.wavelength * E00)) ** 2)) ** 0.5
         return n
 
+    #computes an array of refractive indicies for all layers
     def computeRefraction(self):
         self.refraction = [0 for i in range(5)]
         for i in [0, 1, 3, 4]:

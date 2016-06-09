@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 
+#stores information about laser structure
+#saves refraction and electric field profiles in text and graphic form to HDD
 class Laser:
 
     refraction = []
@@ -34,7 +36,7 @@ class Laser:
         self.concentration = concentration
         self.thickness = thickness
 
-
+    #refraction profile output
     def plotRefraction(self):
         
         plt.plot(self.gridX, self.gridN)
@@ -48,7 +50,8 @@ class Laser:
         for i in range(len(self.gridN)):
             refractionFile.write(str(self.gridX[i]) + ": " + str(self.gridN[i]) + "\n")
         refractionFile.close()
-        
+
+    #field profile output    
     def plotField(self):
         
         for i in range(len(self.field)):
