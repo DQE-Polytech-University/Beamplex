@@ -28,6 +28,18 @@ class HelmholtzSolver:
     UTOTAL = []
     
     def __init__(self, steps, lyambda, thickness, refr):
+        if isinstance(steps, (int, float)) == False or isinstance(lyambda, (int, float)) == False or isinstance(thickness, list) == False or isinstance(refr, list) == False:
+            raise TypeError("type mismatch")
+        if steps < 20:
+            raise ValueError("wrong grid nodes number")
+        if lyambda < 0.85 or lyambda > 1.5:
+            raise ValueError("wavelength out of range")
+        for i in range(5):
+            if isinstance(thickness[i], (int, float)) == False or isinstance(refr[i], (int, float)) == False:
+                raise TypeError("type mismatch")
+            if thickness[i] <= 0 or refr <= 1:
+                raise ValueError("thickness out of range")
+                
         self.matrix_dimension = steps
         self.lyambda0 = lyambda
         self.thickness = thickness
@@ -49,6 +61,20 @@ class HelmholtzSolver:
 
     #composes a matrix for computation of maximal effective refractive index     
     def refractionMatrix(self):
+        if isinstance(self.gridN, list) == False or isinstance(self.matrix_dimension, int) == False or isinstance(self.deltaArb, (int, float)) == False:
+            raise TypeError("type mismatch")
+        if self.matrix_dimension < 20:
+            raise ValueError("wrong grid nodes number")
+        if self.deltaArb <= 0:
+            raise ValueError("wrong deltaArb value")
+        if len(self.gridN) != self.matrix_dimension + 1:
+            raise IndexError("wrong nodes number in the refractive index grid")
+        for i in range(self.matrix_dimension + 1):
+            if isinstance(self.gridN[i], (int, float)) == False:
+                raise TypeError("type mismatch")
+            if self.gridN[i] <= 1:
+                raise ValueError("wrong refractive index value")
+                
         self.Mtr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
         for j in range(self.matrix_dimension + 1):
             for k in range(self.matrix_dimension + 1):
@@ -59,6 +85,21 @@ class HelmholtzSolver:
 
     #finds maximal effective refractive index as a maximal real eigenvalue of Mtr matrix     
     def find_neffective(self):
+        if isinstance(self.matrix_dimension, int) == False or isinstance(self.Mtr, list) == False:
+            raise TypeError("type mismatch")
+        if self.matrix_dimension < 20:
+            raise ValueError("wrong grid nodes number")
+        if len(self.Mtr) != self.matrix_dimension + 1:
+            raise IndexError("wrong dimension of the refractive index matrix")
+        for i in range(self.matrix_dimension + 1):
+            if isinstance(self.Mtr[i], list) == False:
+                raise TypeError("type mismatch")
+            if len(self.Mtr[i]) != self.matrix_dimension + 1:
+                raise IndexError("wrong dimension of the refractive index matrix")
+            for k in range(self.matrix_dimension + 1):
+                if isinstance(self.Mtr[i][k], (int, float)) == False:
+                    raise TypeError("type mismatch")
+                    
         neffective = [x for x in range(self.matrix_dimension + 1)]
         self.neffect = [x for x in range(self.matrix_dimension + 1)]
         matric = linalg.eig(self.Mtr)                            
@@ -72,6 +113,22 @@ class HelmholtzSolver:
 
     #composes a matrix for tridiagonal matrix algorithm
     def find_matrix(self):
+        if isinstance(self.matrix_dimension, int) == False or isinstance(self.gridN, list) == False:
+            raise TypeError("type mismatch")
+        if isinstance(self.neffect[self.index_max], (int, float)) == False or isinstance(self.deltaArb, (int, float)) == False:
+            raise TypeError("type mismatch")
+        if self.matrix_dimension < 20:
+            raise ValueError("wrong grid nodes number")
+        for i in range(self.matrix_dimension + 1):
+            if isinstance(self.gridN[i], (int, float)) == False:
+                raise TypeError("type mismatch")
+            if self.gridN[i] <= 1:
+                raise ValueError("wrong refractive index value")
+        if self.neffect[self.index_max] <= 1:
+            raise ValueError("wrong refractive index value")
+        if self.deltaArb <= 0:
+            raise ValueError("wrong deltaArb value")
+            
         self.Matr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
         for j in range(self.matrix_dimension + 1):
             for k in range(self.matrix_dimension + 1):
@@ -152,6 +209,20 @@ class HelmholtzSolver:
 
     #composes final solution        
     def Field(self):
+        if isinstance(self.matrix_dimension, int) == False or isinstance(self.X, list) == False or isinstance(self.Y, list) == False:
+            raise TypeError("type mismatch")
+        if self.matrix_dimension < 20:
+            raise ValueError("wrong grid nodes number")
+        if len(self.X) != self.matrix_dimension - self.init + 1:
+            raise IndexError("wrong dimension")
+        if len(self.Y) != self.init + 2:
+            raise IndexError("wrong dimension")
+        for i in range(self.matrix_dimension - self.init + 1):
+            if isinstance(self.X[i], (int, float)) == False:
+                raise TypeError("type mismatch")
+        for i in range(self.init + 2):
+            if isinstance(self.Y[i], (int, float)) == False:
+                raise TypeError("type mismatch")
         self.U = [0 for x in range(self.matrix_dimension + 1)]
         for i in range(self.init + 1):
             self.U[i] = self.Y[i]
@@ -160,6 +231,16 @@ class HelmholtzSolver:
 
     #normalizes the solution        
     def Norm(self):
+        if isinstance(self.matrix_dimension, int) == False or isinstance(self.U, list) == False or isinstance(self.deltaX, (int, float)) == False:
+            raise TypeError("type mismatch")
+        if self.deltaX <= 0:
+            raise ValueError("wrong deltaX")
+        if len(self.U) != self.matrix_dimension + 1:
+            raise IndexError("wrong dimension")
+        for i in range(self.matrix_dimension + 1):
+            if isinstance(self.U[i], (int, float)) == False:
+                raise TypeError("type mismatch")
+                
         for i in range(self.matrix_dimension + 1):
             self.U1.append(math.fabs(self.U[i]))
             Umax = - max(self.U1)            
