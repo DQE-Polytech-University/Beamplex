@@ -37,7 +37,7 @@ class HelmholtzSolver:
         for i in range(5):
             if isinstance(thickness[i], (int, float)) == False or isinstance(refr[i], (int, float)) == False:
                 raise TypeError("type mismatch")
-            if thickness[i] <= 0 or refr <= 1:
+            if thickness[i] <= 0 or refr[i] <= 1:
                 raise ValueError("thickness out of range")
                 
         self.matrix_dimension = steps
