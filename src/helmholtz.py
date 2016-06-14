@@ -47,6 +47,7 @@ class HelmholtzSolver:
         self.deltaX = (sum((float(self.thickness[i]) for i in range(0, int(len(self.thickness))))) - 0.001) / float(self.matrix_dimension) 
         self.deltaArb = float(self.deltaX * 2 * math.pi) / float(self.lyambda0)
         self.gridX = [i * self.deltaX for i in range(0, self.matrix_dimension + 1)]
+        self.gridN = []
         for i in self.gridX:
             if 0 <= i and i < self.thickness[0]:
                 self.gridN.append(self.refraction[0])
@@ -107,7 +108,6 @@ class HelmholtzSolver:
         for k in range(self.matrix_dimension + 1):                   
             self.neffect[k] = (cmath.sqrt(neffectiv[k])).real            
     
-    def find_max(self):
         neff_max = max(self.neffect)                             
         self.index_max = self.neffect.index(neff_max)
 
@@ -139,15 +139,12 @@ class HelmholtzSolver:
 
     #finds coefficients for tridiagonal matrix algorithm
     def coeffs(self, initPoint):
-        if isinstance(self.aalp, list) == False:
-            raise TypeError("self.aalp should be a list")
-        for i in range(len(self.aalp)):
-            if isinstance(self.aalp[i], (int, float)) == False:
-                raise TypeError("self.aalp elements should be numbers")
-        if self.matrix_dimension <= 0:
+        if isinstance(self.matrix_dimension, int) == False or isinstance(initPoint, int) == False:
+            raise TypeError("type mismatch")
+        if initPoint <= 0 or initPoint >= self.matrix_dimension:
+            raise ValueError("wrong initial point")
+        if self.matrix_dimension <= 20:
             raise ValueError("self.matrix_dimension out of range")
-        if len(self.aalp) == self.matrix_dimension + 1 is False:
-            raise ValueError("self.aalp out of range")
         for j in range(self.matrix_dimension + 1):
             for k in range(self.matrix_dimension + 1):
                 if isinstance(self.Matr[j][k], (int, float)) == False:
@@ -168,9 +165,11 @@ class HelmholtzSolver:
             
     #forward sweep of tridiagonal matrix algorithm
     def find_Xforward(self):
-        if self.init <= 0:
+        if isinstance(self.init, int) == False:
+            raise TypeError("type mismatch")
+        if self.init <= 0 or self.init >= self.matrix_dimension:
             raise ValueError("self.init out of range")
-        if self.matrix_dimension <= 0:
+        if self.matrix_dimension <= 20:
             raise ValueError("self.matrix_dimension out of range")
         if isinstance(self.Matr, list) == False:
             raise TypeError("self.Y should be a list")
@@ -190,8 +189,12 @@ class HelmholtzSolver:
 
     #reverse sweep of tridiagonal matrix algorithm        
     def find_Xrev(self):
-        if self.init <= 0:
+        if isinstance(self.init, int) == False:
+            raise TypeError("type mismatch")
+        if self.init <= 0 or self.init >= self.matrix_dimension:
             raise ValueError("self.init out of range")
+        if self.matrix_dimension <= 20:
+            raise ValueError("self.matrix_dimension out of range")
         if isinstance(self.Matr, list) == False:
             raise TypeError("self.Y should be a list")
         for j in range(self.matrix_dimension + 1):
