@@ -36,6 +36,20 @@ class RefractionCalc:
         
     #index of refraction Al_x Ga_1-x As calculation    
     def refraction_AlGaAs(self, concentration):	
+        
+        if isinstance(self.wavelength, (int, float)) == False:
+            raise TypeError("self.wavelength should be a number")
+        if isinstance(self.concentration, (int, float)) == False:
+            raise TypeError("self.concentration should be a number")
+        if self.wavelength is None:
+            raise ValueError("self.wavelength is undefined")
+        if self.concentration is None:
+            raise ValueError("self.concentration is undefined")
+        if self.wavelength < 0.8 or self.wavelength > 1.5:
+            raise ValueError("self.wavelength out of range")
+        if concentration <= 0 or concentration >= 1:
+            raise ValueError("concentration out of range")
+            
         A0 = 6.3 + 19 * concentration
         B0 = 9.4 - 10.2 * concentration
         E0 = 1.425 + 1.155 * concentration + 0.37 * concentration ** 2
@@ -49,6 +63,20 @@ class RefractionCalc:
     
     #index of refraction In_x Ga_1-x As calculation
     def refraction_InGaAs(self, concentration):	
+        
+        if isinstance(self.wavelength, (int, float)) == False:
+            raise TypeError("self.wavelength should be a number")
+        if isinstance(self.concentration, (int, float)) == False:
+            raise TypeError("self.concentration should be a number")
+        if self.wavelength is None:
+            raise ValueError("self.wavelength is undefined")
+        if self.concentration is None:
+            raise ValueError("self.concentration is undefined")
+        if self.wavelength < 0.8 or self.wavelength > 1.5:
+            raise ValueError("self.wavelength out of range")
+        if concentration <= 0 or concentration >= 1:
+            raise ValueError("concentration out of range")
+        
         A = 8.95
         B = 2.054
         C = 0.6245
@@ -59,9 +87,20 @@ class RefractionCalc:
 
     #computes an array of refractive indicies for all layers
     def computeRefraction(self):
+        
+        if isinstance(concentration, list) == False:
+            raise TypeError("concentration should be a list")
+        for i in range(5):
+            if isinstance(concentration[i], (int, float)) == False:
+                raise TypeError("concentration elements should be numbers")
+                break
+        if concentration is None:
+            raise ValueError("concentration is undefined")
+        for i in range(5): 
+            if concentration[i] <= 0 or concentration[i] >= 1:
+                raise ValueError("concentration out of range")
+                
         self.refraction = [0 for i in range(5)]
         for i in [0, 1, 3, 4]:
             self.refraction[i] = self.refraction_AlGaAs(self.concentration[i])
         self.refraction[2] = self.refraction_InGaAs(self.concentration[2])
-
-
