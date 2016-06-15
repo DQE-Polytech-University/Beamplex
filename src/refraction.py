@@ -39,7 +39,7 @@ class RefractionCalc:
         
         if isinstance(self.wavelength, (int, float)) == False:
             raise TypeError("self.wavelength should be a number")
-        if isinstance(self.concentration, (int, float)) == False:
+        if isinstance(concentration, (int, float)) == False:
             raise TypeError("self.concentration should be a number")
         if self.wavelength is None:
             raise ValueError("self.wavelength is undefined")
@@ -66,7 +66,7 @@ class RefractionCalc:
         
         if isinstance(self.wavelength, (int, float)) == False:
             raise TypeError("self.wavelength should be a number")
-        if isinstance(self.concentration, (int, float)) == False:
+        if isinstance(concentration, (int, float)) == False:
             raise TypeError("self.concentration should be a number")
         if self.wavelength is None:
             raise ValueError("self.wavelength is undefined")
@@ -88,16 +88,16 @@ class RefractionCalc:
     #computes an array of refractive indicies for all layers
     def computeRefraction(self):
         
-        if isinstance(concentration, list) == False:
+        if isinstance(self.concentration, list) == False:
             raise TypeError("concentration should be a list")
         for i in range(5):
-            if isinstance(concentration[i], (int, float)) == False:
+            if isinstance(self.concentration[i], (int, float)) == False:
                 raise TypeError("concentration elements should be numbers")
                 break
-        if concentration is None:
+        if self.concentration is None:
             raise ValueError("concentration is undefined")
         for i in range(5): 
-            if concentration[i] <= 0 or concentration[i] >= 1:
+            if self.concentration[i] <= 0 or self.concentration[i] >= 1:
                 raise ValueError("concentration out of range")
                 
         self.refraction = [0 for i in range(5)]
