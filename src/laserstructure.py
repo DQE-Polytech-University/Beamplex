@@ -39,6 +39,17 @@ class Laser:
     #refraction profile output
     def plotRefraction(self):
         
+        if isinstance(self.gridX, list)) == False:
+            raise TypeError("self.gridX should be a list")
+        if isinstance(self.gridN, list)) == False:
+            raise TypeError("self.gridN should be a list")
+        if len(self.gridX) <= 20:
+            raise ValueError("len(self.gridX) out of range")
+        if len(self.gridN) <= 20:
+            raise ValueError("len(self.gridN) out of range")
+        if (len(self.gridX) == (self.gridN)) == False:
+            raise IndexError("self.gridX should be the same dimension as self.gridN")
+            
         plt.plot(self.gridX, self.gridN)
         plt.xlabel('position, micrometers')
         plt.ylabel('refraction index, arb. units')
@@ -53,6 +64,17 @@ class Laser:
 
     #field profile output    
     def plotField(self):
+        
+        if isinstance(self.gridX, list)) == False:
+            raise TypeError("self.gridX should be a list")
+        if isinstance(self.field, list)) == False:
+            raise TypeError("self.field should be a list")
+       if len(self.gridX) <= 20:
+            raise ValueError("len(self.gridX) out of range")
+        if len(self.field) <= 20:
+            raise ValueError("len(self.field) out of range")
+        if (len(self.gridX) == (self.field)) == False:
+            raise TypeError("self.gridX should be the same dimension as self.field")
         
         for i in range(len(self.field)):
             self.field[i] = self.field[i] ** 2
