@@ -178,6 +178,103 @@ class TestHelmholtzInput(unittest.TestCase):
         self.solver8 = self.correctSolver("find_matrix")
         self.solver8.deltaArb = 0
         self.assertRaises(ValueError, self.solver8.find_matrix)
+        
+    def testCoeffs(self):
+        self.solver1 = self.correctSolver("coeffs")
+        self.solver1.matrix_dimension = "999"
+        self.assertRaises(TypeError, self.solver1.coeffs, 95)
+
+        self.solver2 = self.correctSolver("coeffs")
+        self.solver2.matrix_dimension = 10
+        self.assertRaises(ValueError, self.solver2.coeffs, 95)
+
+        self.solver3 = self.correctSolver("coeffs")
+        self.assertRaises(TypeError, self.solver3.coeffs, "95")
+
+        self.solver4 = self.correctSolver("coeffs")
+        self.assertRaises(ValueError, self.solver4.coeffs, -1)
+
+        self.solver5 = self.correctSolver("coeffs")
+        self.solver5.matrix_dimension = 1000
+        self.assertRaises(IndexError, self.solver5.coeffs, 95)
+
+        self.solver6 = self.correctSolver("coeffs")
+        self.solver6.Matr[0] = "[1, 2, 3]"
+        self.assertRaises(TypeError, self.solver6.coeffs, 95)
+
+        self.solver7 = self.correctSolver("coeffs")
+        self.solver7.Matr[0] = [1, 2, 3]
+        self.assertRaises(IndexError, self.solver7.coeffs, 95)
+
+        self.solver8 = self.correctSolver("coeffs")
+        self.solver8.Matr[0][0] = "1"
+        self.assertRaises(TypeError, self.solver8.coeffs, 95)
+
+    def testFindXForward(self):
+        self.solver1 = self.correctSolver("find_Xforward")
+        self.solver1.matrix_dimension = "999"
+        self.assertRaises(TypeError, self.solver1.find_Xforward)
+
+        self.solver2 = self.correctSolver("find_Xforward")
+        self.solver2.matrix_dimension = 10
+        self.assertRaises(ValueError, self.solver2.find_Xforward)
+
+        self.solver3 = self.correctSolver("find_Xforward")
+        self.solver3.init = "95"
+        self.assertRaises(TypeError, self.solver3.find_Xforward)
+
+        self.solver4 = self.correctSolver("find_Xforward")
+        self.solver4.init = -1
+        self.assertRaises(ValueError, self.solver4.find_Xforward)
+
+        self.solver5 = self.correctSolver("find_Xforward")
+        self.solver5.matrix_dimension = 1000
+        self.assertRaises(IndexError, self.solver5.find_Xforward)
+
+        self.solver6 = self.correctSolver("find_Xforward")
+        self.solver6.Matr[0] = "[1, 2, 3]"
+        self.assertRaises(TypeError, self.solver6.find_Xforward)
+
+        self.solver7 = self.correctSolver("find_Xforward")
+        self.solver7.Matr[0] = [1, 2, 3]
+        self.assertRaises(IndexError, self.solver7.find_Xforward)
+
+        self.solver8 = self.correctSolver("find_Xforward")
+        self.solver8.Matr[0][0] = "1"
+        self.assertRaises(TypeError, self.solver8.find_Xforward)
+
+    def testFindXRev(self):
+        self.solver1 = self.correctSolver("find_Xrev")
+        self.solver1.matrix_dimension = "999"
+        self.assertRaises(TypeError, self.solver1.find_Xrev)
+
+        self.solver2 = self.correctSolver("find_Xrev")
+        self.solver2.matrix_dimension = 10
+        self.assertRaises(ValueError, self.solver2.find_Xrev)
+
+        self.solver3 = self.correctSolver("find_Xrev")
+        self.solver3.init = "95"
+        self.assertRaises(TypeError, self.solver3.find_Xrev)
+
+        self.solver4 = self.correctSolver("find_Xrev")
+        self.solver4.init = -1
+        self.assertRaises(ValueError, self.solver4.find_Xrev)
+
+        self.solver5 = self.correctSolver("find_Xrev")
+        self.solver5.matrix_dimension = 1000
+        self.assertRaises(IndexError, self.solver5.find_Xrev)
+
+        self.solver6 = self.correctSolver("find_Xrev")
+        self.solver6.Matr[0] = "[1, 2, 3]"
+        self.assertRaises(TypeError, self.solver6.find_Xrev)
+
+        self.solver7 = self.correctSolver("find_Xrev")
+        self.solver7.Matr[0] = [1, 2, 3]
+        self.assertRaises(IndexError, self.solver7.find_Xrev)
+
+        self.solver8 = self.correctSolver("find_Xrev")
+        self.solver8.Matr[0][0] = "1"
+        self.assertRaises(TypeError, self.solver8.find_Xrev)
 
     def testField(self):
         self.solver1 = self.correctSolver("Field")
