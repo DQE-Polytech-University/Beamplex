@@ -21,9 +21,9 @@ The program consists of 4 modules:
 
 ###The load module of input data (jsonloader)
 
-<table> 
-  <tr>
-    <td width="200">Loading data into the buffer. Diagnostics of the system and reports any errors that occurred</td><td><listing>def loadJSON( self ):
+Loading data into the buffer. Diagnostics of the system and reports any errors that occurred
+
+     def loadJSON( self ):
 	        try:
 	            with open(self.fileName) as jsonFile:
 	                self.data = json.load(jsonFile)
@@ -32,12 +32,10 @@ The program consists of 4 modules:
 	        except ValueError:
 	            raise ValueError(": syntax error")
 	        print(self.fileName + " successfully loaded")
-    </td>
-  </tr>
+    
+Extracting and reading information from the input file, identify the errors in the file (no input incorrect data: number of layers,the boundary values)
 
-
-  <tr>
-    <td width="200">Extracting and reading information from the input file, identify the errors in the file (no input incorrect data: number of layers,the boundary values)</td><td><listing>def parseJSONData(self):      
+    def parseJSONData(self):      
 	        try:
 	            self.concentration = []
 	            self.thickness = []
@@ -52,17 +50,17 @@ The program consists of 4 modules:
 	
 	        if isinstance( self.wavelength, (int, float)) == False
 
- or isinstance( self.thickness, (list)) == False 
-or isinstance( self.concentration, (list)) == False:
+    or isinstance( self.thickness, (list)) == False 
+    or isinstance( self.concentration, (list)) == False:
 	            raise TypeError(".json: type mismatch")
 	        for i in range(5):
 	            if isinstance(self.concentration[i], (int, float)) == False 
 
 
-or isinstance( self.thickness[i], (int, float)) == False:
+    or isinstance( self.thickness[i], (int, float)) == False:
 	                raise TypeError(".json: type mismatch")
 	            if self.concentration[i] <= 0 or self.concentration[i] >= 1
- or self.thickness[i] <= 0:
+    or self.thickness[i] <= 0:
 	                raise ValueError(".json: data out of range")
 	
 	        if self.wavelength < 0.85 or self.wavelength > 1.5:
@@ -79,14 +77,12 @@ or isinstance( self.thickness[i], (int, float)) == False:
 	        return(( self.wavelength, self.concentration, self.thickness))
 
 
-    </td>
-</table>
-
+  
 
 ###The calculation module of the refractive index  (refraction)
-<table>
-  <tr>
-    <td width="200">Validation of necessary input data for the further calculation of the index of refraction for InGaAs и AlGaAs</td><td ><listing>def refraction_AlGaAs(self, concentration):	
+Validation of necessary input data for the further calculation of the index of refraction for InGaAs и AlGaAs
+
+    def refraction_AlGaAs(self, concentration):	
 	        
 	        if isinstance(self.wavelength, (int, float)) == False:
 	            raise TypeError("self.wavelength should be a number")
@@ -112,7 +108,7 @@ or isinstance( self.thickness[i], (int, float)) == False:
 	        n = (A0 * (f + fSO/2 * (E0 / (E0 + delta0)) ** 1.5) + B0) ** 0.5
 	        return n
 
-  def refraction_InGaAs(self, concentration):	
+    def refraction_InGaAs(self, concentration):	
 	        
 	        if isinstance(self.wavelength, (int, float)) == False:
 	            raise TypeError("self.wavelength should be a number")
@@ -135,23 +131,21 @@ or isinstance( self.thickness[i], (int, float)) == False:
 	        n = (A + B/ (1 - (C * Eggaas / (self.wavelength * E00)) ** 2)) ** 0.5
 	        return n
 
-    </td>
-  </tr>
-</table>
+   
 
 ###The module of solutions of the Helmholtz equation (helmhotz)***
 
 
-<table>
-  <tr>
-    <td width="200" >the advent of the grid functions for the discretization of the index profile in the coordinate</td><td><listing> self.matrix_dimension = steps
+The advent of the grid functions for the discretization of the index profile in the coordinate
+   
+    self.matrix_dimension = steps
 	        self.lyambda0 = lyambda
 	        self.thickness = thickness
 	        self.refraction = refr
 	        self.deltaX = (sum((float(self.thickness[i])
- for i in range(0, int(len(self.thickness))))) - 0.001) / 
+    for i in range(0, int(len(self.thickness))))) - 0.001) / 
 
-float(self.matrix_dimension) 
+    float(self.matrix_dimension) 
 	        self.deltaArb = float(self.deltaX * 2 * math.pi) / float(self.lyambda0)
 	        self.gridX = [i * self.deltaX for i in range(0, self.matrix_dimension + 1)]
 
@@ -162,25 +156,22 @@ float(self.matrix_dimension)
 	            if self.thickness[0] <= i and i < self.thickness[0] + self.thickness[1]:
 	                self.gridN.append(self.refraction[1])
 	            if self.thickness[0] + self.thickness[1] <= i and i < self.thickness[0] + 
-self.thickness[1] + self.thickness[2]:
+    self.thickness[1] + self.thickness[2]:
 	                self.gridN.append(self.refraction[2])
 	            if self.thickness[0] + self.thickness[1] + 
-self.thickness[2] <= i and i < self.thickness[0] + 
-self.thickness[1] + self.thickness[2] 
-+ self.thickness[3]:
+    self.thickness[2] <= i and i < self.thickness[0] + 
+     self.thickness[1] + self.thickness[2] + self.thickness[3]:
 	                self.gridN.append(self.refraction[3])
 	            if self.thickness[0] + self.thickness[1] + 
-self.thickness[2] + self.thickness[3] <= i and i < self.thickness[0] + 
-self.thickness[1] + self.thickness[2] +self.thickness[3] + self.thickness[4]:
+     self.thickness[2] + self.thickness[3] <= i and i < self.thickness[0] + 
+    self.thickness[1] + self.thickness[2] +self.thickness[3] + self.thickness[4]:
 
 	                self.gridN.append(self.refraction[4])
 
 
-    </td>
-  </tr>
+  The matrix to compute the maximum  of refractive index
 
-  <tr>
-    <td width="200" >The matrix to compute the maximum  of refractive index</td><td ><listing>self.Mtr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
+    self.Mtr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
 	        for j in range(self.matrix_dimension + 1):
 	            for k in range(self.matrix_dimension + 1):
 	                if j == k:
@@ -188,10 +179,9 @@ self.thickness[1] + self.thickness[2] +self.thickness[3] + self.thickness[4]:
 	                elif j == k - 1 or j == k + 1:
 	                    self.Mtr[j][k] = 1 / self.deltaArb ** 2
 
-    </td>
-  </tr>
-<tr>
-    <td width="200" >Finding the maximum value of the refractive index as the maximum eigenvalue of the matrix</td><td><listing>neffective = [x for x in range(self.matrix_dimension + 1)]
+ Finding the maximum value of the refractive index as the maximum eigenvalue of the matrix
+
+    neffective = [x for x in range(self.matrix_dimension + 1)]
 	        self.neffect = [x for x in range(self.matrix_dimension + 1)]
 	        matric = linalg.eig(self.Mtr)                            
 	        neffectiv = matric[0]                                    
@@ -201,11 +191,9 @@ self.thickness[1] + self.thickness[2] +self.thickness[3] + self.thickness[4]:
 	        neff_max = max(self.neffect)                             
 	        self.index_max = self.neffect.index(neff_max)
 
-    </td>
-  </tr>
+ Composition a tridiagonal matrix and finding proracing coefficients  
 
-<tr>
-    <td width="200">Composition a tridiagonal matrix and finding proracing coefficients  </td><td><listing>self.Matr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
+    self.Matr = [[0]*(self.matrix_dimension + 1) for x in range(self.matrix_dimension + 1)]
 	        for j in range(self.matrix_dimension + 1):
 	            for k in range(self.matrix_dimension + 1):
 	                if j == k:
@@ -213,50 +201,41 @@ self.thickness[1] + self.thickness[2] +self.thickness[3] + self.thickness[4]:
 	                elif j == k - 1 or j == k + 1:
 	                    self.Matr[j][k] = 1 / self.deltaArb ** 2
 
-self.init = initPoint
+    self.init = initPoint
 	        self.Matr[self.init][self.init] = 1
 	        self.aalp = [0 for x in range(self.matrix_dimension + 1)]
-	        self.aalp[self.matrix_dimension] = float(-self.Matr[self.matrix_dimension][self.matrix_dimension - 1]) /
- float(self.Matr[self.matrix_dimension][self.matrix_dimension])
+	        self.aalp[self.matrix_dimension] = float(-self.Matr[self.matrix_dimension]   float(self.Matr[self.matrix_dimension][self.matrix_dimension])
 	        for i in range(self.matrix_dimension - 1, self.init, -1):
 	            self.aalp[i] = float(-self.Matr[i][i-1]) / float(self.Matr[i][i] + self.Matr[i][i+1] * self.aalp[i+1])
 
+Forward sweep of tridiagonal matrix algorithm
 
-    </td>
-  </tr>
-
-<tr>
-    <td width="200">Forward sweep of tridiagonal matrix algorithm</td><td ><listing>self.X = [0 for x in range(self.matrix_dimension - self.init + 1)]
+    self.X = [0 for x in range(self.matrix_dimension - self.init + 1)]
 	        self.X[0] = self.aalp[self.init+1] * self.Matr[self.init][self.init]
 	        for j in range(1,self.matrix_dimension-self.init +1):
 	            self.X[j] = self.aalp[j+self.init]* self.X[j-1]
-    </td>
-  </tr>
 
-<tr>
-    <td width="200" >Reverse sweep of tridiagonal matrix algorithm </td><td ><listing>   self.Y = [0 for x in range(self.init + 2)]
+Reverse sweep of tridiagonal matrix algorithm 
+
+     self.Y = [0 for x in range(self.init + 2)]
 	        self.Y[self.init ] =  self.X[0]
 	        self.Y[self.init + 1] = self.X[1]
 	        for j in range(self.init - 1,-1,-1):
 	            self.Y[j] = float((-1/self.Matr[j+1][j])) * float((self.Matr[j+1][j+1] * self.Y[j+1] +
- self.Matr[j+1][j+2] * self.Y[j+2]))
+    self.Matr[j+1][j+2] * self.Y[j+2]))
 
 
-    </td>
-  </tr>
-
-<tr>
-    <td width="200">Composes final solutionя</td><td ><listing>self.U = [0 for x in range(self.matrix_dimension + 1)]
+    Composes final solutionя
+    self.U = [0 for x in range(self.matrix_dimension + 1)]
 	        for i in range(self.init + 1):
 	            self.U[i] = self.Y[i]
 	        for j in range(self.init + 1 , self.matrix_dimension + 1):
 	            self.U[j] = self.X[j - self.init]
 
-    </td>
-  </tr>
+   
+Normalizes the solution
 
-<tr>
-    <td width="200">Normalizes the solution</td><td ><listing>for i in range(self.matrix_dimension + 1):
+    for i in range(self.matrix_dimension + 1):
 	            self.U1.append(math.fabs(self.U[i]))
 	            Umax = - max(self.U1)            
 	        for j in range(self.matrix_dimension + 1):
@@ -270,13 +249,13 @@ self.init = initPoint
 	            w = float(self.UtotalNorm1[n]) / float(math.sqrt(IntU))
 	            self.UTOTAL.append(w)
 
-</table>
+
 
 ###Module plotting the dependence of the field amplitude and refractive index on the coordinate from the surface of the heterostructure (laserSrtusture)
 
-<table>
-  <tr>
-    <td width="200">The graph of the dependence of refractive index on the coordinate</td><td><listing>plt.plot(self.gridX, self.gridN)
+The graph of the dependence of refractive index on the coordinate
+
+    plt.plot(self.gridX, self.gridN)
 	        plt.xlabel('position, micrometers')
 	        plt.ylabel('refraction index, arb. units')
 	        plt.title('Refraction Index Profile')
@@ -288,10 +267,9 @@ self.init = initPoint
 	            refractionFile.write(str(self.gridX[i]) + ": " + str(self.gridN[i]) + "\n")
 	        refractionFile.close()
 
-    </td>
-  </tr>
- <tr>
-    <td width="200">The graph of the field distribution from the coordinates</td><td><listing>for i in range(len(self.field)):
+ The graph of the field distribution from the coordinates
+    
+      for i in range(len(self.field)):
 	            self.field[i] = self.field[i] ** 2
 	        plt.plot(self.gridX, self.field)
 	        plt.xlabel('position, micrometers')
@@ -304,8 +282,3 @@ self.init = initPoint
 	        for i in range(len(self.gridN)):
 	            fieldFile.write(str(self.gridX[i]) + ": " + str(self.field[i]) + "\n")
 	        fieldFile.close()
-
-    </td>
-  </tr>
-
-</table>
